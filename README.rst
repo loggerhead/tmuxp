@@ -1,12 +1,12 @@
 Little changes
 ---------------
 
- - Add global config file_.
+ - Add global config_. 
     ``$TMUXP_DIR`` or ``~/.tmuxp`` is session config save directory
-    config file read from ``$TMUXP_CONFIG`` or ``session_save_dir/.tmuxp.conf``
+    config read from ``$TMUXP_CONFIG`` or ``session_save_dir/.tmuxp.conf``
  - Add default action on `freeze` and `load` (try it :)
 
-.. _config file: https://github.com/loggerhead/tmuxp/blob/master/examples/.tmuxp.conf
+.. _config: https://github.com/loggerhead/tmuxp/blob/master/examples/.tmuxp.conf
 
 Tmuxp
 -----
