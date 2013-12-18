@@ -79,7 +79,7 @@ Ohloh           https://www.ohloh.net/p/tmuxp
 License         `BSD`_.
 install         .. code-block:: bash
 
-                    $ git clone https://github.com/tony/tmuxp.git
+                    $ git clone https://github.com/loggerhead/tmuxp.git
                     $ cd tmuxp
                     $ sudo python setup install
 usage           .. code-block:: bash
