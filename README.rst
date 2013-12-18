@@ -1,7 +1,11 @@
 Little changes
 ---------------
- - Add global config file
- - Add default action on `freeze` and `load`
+
+ - Add global config file.
+ - Add default action on `freeze` and `load` (try it :)
+
+Tmuxp
+-----
 
 `tmuxp` solves the panes / pains of managing workspaces.
 
