@@ -1,8 +1,12 @@
 Little changes
 ---------------
 
- - Add global config file.
+ - Add global config file_.
+    ``$TMUXP_DIR`` or ``~/.tmuxp`` is session config save directory
+    config file read from ``$TMUXP_CONFIG`` or ``session_save_dir/.tmuxp.conf``
  - Add default action on `freeze` and `load` (try it :)
+
+.. _config file: https://github.com/loggerhead/tmuxp/blob/master/examples/.tmuxp.conf
 
 Tmuxp
 -----
@@ -73,9 +77,15 @@ pypi            https://pypi.python.org/pypi/tmuxp
 Crate.io        https://crate.io/packages/tmuxp/
 Ohloh           https://www.ohloh.net/p/tmuxp
 License         `BSD`_.
-git repo        .. code-block:: bash
+install         .. code-block:: bash
 
                     $ git clone https://github.com/tony/tmuxp.git
+                    $ cd tmuxp
+                    $ sudo python setup install
+usage           .. code-block:: bash
+
+                    $ tmuxp freeze
+                    $ tmuxp load
 install dev     .. code-block:: bash
 
                     $ git clone https://github.com/tony/tmuxp.git tmuxp
