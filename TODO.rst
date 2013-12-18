@@ -2,6 +2,8 @@
 TODO
 ====
 
+ - auto complete 
+
 .. _0.1 milestone:
 
 Milestone 0.1
