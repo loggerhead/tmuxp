@@ -423,7 +423,7 @@ def command_load(args):
         return
 
     if not args.config:
-        args.config = tmuxp_config['last_save_file'] or []
+        args.config = tmuxp_config['last_save_file']
     if isinstance(args.config, list):
         args.config = ' '.join(args.config)
 

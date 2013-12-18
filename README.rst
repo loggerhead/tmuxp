@@ -1,3 +1,8 @@
+Little changes
+---------------
+ - Add global config file
+ - Add default action on `freeze` and `load`
+
 `tmuxp` solves the panes / pains of managing workspaces.
 
 .. image:: https://travis-ci.org/tony/tmuxp.png?branch=master
@@ -20,7 +25,7 @@ tmuxp, a novel approach to manage `tmux(1)`_ (>= 1.8) workspaces through
 - `bash, zsh and tcsh`_ completion.
 - Unit tested against live tmux (1.8 and git). See `travis.yml`_
   file, `tmuxp on Travis CI`_ and `testing`_ page.
-- `Documentation`_ (also in `中文`_), `Examples`_, `Source`_, 
+- `Documentation`_ (also in `中文`_), `Examples`_, `Source`_,
   `Commands`_, `Internals`_.
 - and `much, much more`_.
 
@@ -82,6 +87,11 @@ tests           .. code-block:: bash
                     $ python ./run_tests.py
 ==============  ==========================================================
 
+Thanks
+---------------
+tony_
+
+.. _tony: https://github.com/tony/tmuxp
 .. _BSD: http://opensource.org/licenses/BSD-3-Clause
 .. _developing and testing: http://tmuxp.readthedocs.org/en/latest/developing.html
 .. _installing bash completion: http://tmuxp.readthedocs.org/en/latest/quickstart.html#bash-completion
