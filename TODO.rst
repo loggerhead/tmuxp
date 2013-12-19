@@ -2,6 +2,11 @@
 TODO
 ====
 
+ * zsh-completion_
+ * _tmuxp
+
+.. _zsh-completion: http://wikimatze.de/writing-zsh-completion-for-padrino.html
+
 .. _0.1 milestone:
 
 Milestone 0.1

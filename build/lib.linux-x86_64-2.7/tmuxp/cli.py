@@ -258,8 +258,9 @@ def startup(dirname=None):
         config_dir = tmuxp_config['save_to_dir']
 
 
-def before_exit():
+def exit_tmuxp(message=None):
     tmuxp_config.save()
+    sys.exit(message)
 
 
 def load_workspace(config_file, args):
@@ -301,7 +302,7 @@ def load_workspace(config_file, args):
                 os.environ['TMUX'] = tmux_env
                 return
             else:
-                sys.exit('Session created in detached state.')
+                exit_tmuxp('Session created in detached state.')
 
         builder.session.attach_session()
     except exc.TmuxSessionExists as e:
@@ -333,7 +334,7 @@ def load_workspace(config_file, args):
             else:
                 builder.session.attach_session()
         else:
-            sys.exit()
+            exit_tmuxp()
 
 
 def command_freeze(args):
@@ -381,7 +382,7 @@ def command_freeze(args):
     elif config_format == 'json':
         newconfig = configparser.export('json', indent=2)
     else:
-        sys.exit('Unknown config format.')
+        exit_tmuxp('Unknown config format.')
 
     dest = None
     def save_path(filename):
@@ -389,19 +390,24 @@ def command_freeze(args):
             config_dir,
             '%s.%s' % (filename, config_format)
         ))
-    filename = sconf.get('session_name')
-    save_to = [save_path(filename)]
-    while not dest:
-        if tmuxp_config['overwrite'] != True and os.path.exists(save_to[0]):
+    filename = save_path(sconf.get('session_name'))
+    while os.path.exists(filename):
+        if tmuxp_config['overwrite']:
+            break
+        else:
+            lastpath = filename
             filename = prompt(
-                "'%s' exists. Pick a new filename." % save_to[0],
-                default=save_to[0])
-            save_to[0] = save_path(filename)
-            continue
+                "File exists, pick a new filename.",
+                default=lastpath
+            )
+            # overwrite
+            if filename == lastpath:
+                break
+            else:
+                filename = save_path(filename)
 
-        dest = save_to[0]
-
-    dest = os.path.abspath(os.path.relpath(os.path.expanduser(dest)))
+    dest = os.path.expanduser(filename)
+    dest = os.path.abspath(os.path.relpath(dest))
     buf = open(dest, 'w')
     buf.write(newconfig)
     buf.close()
@@ -423,7 +429,7 @@ def command_load(args):
         return
 
     if not args.config:
-        args.config = tmuxp_config['last_save_file']
+        args.config = tmuxp_config['last_save_file'] or []
     if isinstance(args.config, list):
         args.config = ' '.join(args.config)
 
@@ -431,7 +437,7 @@ def command_load(args):
         if config.in_cwd():
             configfile = config.in_cwd()[0]
         else:
-            sys.exit('No tmuxp configs found in current directory.')
+            exit_tmuxp('No tmuxp configs found in current directory.')
     else:
         configfile = args.config
 
@@ -488,7 +494,7 @@ def command_import_teamocil(args):
             newconfig = config.import_teamocil(configparser.get())
             configparser.import_config(newconfig)
         else:
-            sys.exit('File not found: %s' % configfile)
+            exit_tmuxp('File not found: %s' % configfile)
 
         config_format = prompt_choices('Convert to', choices=[
                                        'yaml', 'json'], default='yaml')
@@ -500,7 +506,7 @@ def command_import_teamocil(args):
         elif config_format == 'json':
             newconfig = configparser.export('json', indent=2)
         else:
-            sys.exit('Unknown config format.')
+            exit_tmuxp('Unknown config format.')
 
         print(newconfig)
         print(
@@ -533,7 +539,7 @@ def command_import_teamocil(args):
                 '<http://tmuxp.readthedocs.org/en/latest/examples.html>\n'
                 'View tmuxp docs at <http://tmuxp.readthedocs.org/>'
             )
-            sys.exit()
+            exit_tmuxp()
 
 
 def command_import_tmuxinator(args):
@@ -577,7 +583,7 @@ def command_import_tmuxinator(args):
             newconfig = config.import_tmuxinator(configparser.get())
             configparser.import_config(newconfig)
         else:
-            sys.exit('File not found: %s' % configfile)
+            exit_tmuxp('File not found: %s' % configfile)
 
         config_format = prompt_choices('Convert to', choices=[
                                        'yaml', 'json'], default='yaml')
@@ -589,7 +595,7 @@ def command_import_tmuxinator(args):
         elif config_format == 'json':
             newconfig = configparser.export('json', indent=2)
         else:
-            sys.exit('Unknown config format.')
+            exit_tmuxp('Unknown config format.')
 
         print(newconfig)
         print(
@@ -622,7 +628,7 @@ def command_import_tmuxinator(args):
                 '<http://tmuxp.readthedocs.org/en/latest/examples.html>\n'
                 'View tmuxp docs at <http://tmuxp.readthedocs.org/>'
             )
-            sys.exit()
+            exit_tmuxp()
 
 
 def command_convert(args):
@@ -957,10 +963,11 @@ def get_parser():
 
 def main():
     """Main CLI application."""
+    # load global config to 'tmuxp_config' from file
     startup()
 
     parser = get_parser()
-    argcomplete.autocomplete(parser, always_complete_options=True)
+    argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
     setup_logger(
@@ -971,10 +978,9 @@ def main():
         util.has_required_tmux_version()
     except exc.TmuxpException as e:
         logger.error(e)
-        sys.exit()
+        exit_tmuxp()
 
-    # init from global config file
-    # warning once
+    # if not set 'warning' option, then just warning once
     if tmuxp_config['warning'] != False:
         util.oh_my_zsh_auto_title()
         if tmuxp_config['warning'] is None:
@@ -1007,4 +1013,4 @@ def main():
             parser.print_help()
     except KeyboardInterrupt:
         pass
-    before_exit()
+    exit_tmuxp()
